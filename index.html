@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+    <title>Real-Time Calculator</title>
+    <script>
+        function calculateTotal() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const quantity = parseFloat(document.getElementById('quantity').value) || 0;
+            document.getElementById('result').innerText = (amount * quantity).toFixed(2);
+        }
+    </script>
+</head>
+
+<body>
+    <h2>Real-Time Calculator</h2>
+    <label>Amount: <input type="number" id="amount" oninput="calculateTotal()"></label><br><br>
+    <label>Quantity: <input type="number" id="quantity" oninput="calculateTotal()"></label><br><br>
+    <h3>Total: $<span id="result">0.00</span></h3>
+
+    <button onclick="showPopup()">Submit & Continue</button>
+
+    <!-- Popup Form -->
+    <div id="popup" style="display:none;">
+        <h3>Enter Your Email</h3>
+        <input type="email" id="userEmail" placeholder="Enter email" required>
+        <button onclick="submitData()">Submit</button>
+    </div>
+
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        async function submitData() {
+            const email = document.getElementById('userEmail').value;
+            const total = document.getElementById('result').innerText;
+
+            // Send data to Tape app (next steps below)
+            const data = {
+                email: email,
+                total: total
+            };
+
+            const response = await fetch('https://tapeapp.com/api/catch/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3b3JrZmxvd0RlZklkIjoxNzYwODIsIm9yZ2FuaXphdGlvbklkIjoyMDI4LCJzY29wZSI6Indrcl92MSJ9.Gcyw0veIYANwGlVlPTrsmm2fDSrKBJzd3c_URPnBvPE', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                alert('Data submitted successfully!');
+                document.getElementById('popup').style.display = 'none';
+            } else {
+                alert('Submission failed.');
+            }
+        }
+    </script>
+</body>
+
+</html>
